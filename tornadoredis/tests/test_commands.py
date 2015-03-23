@@ -6,10 +6,12 @@ from datetime import datetime, timedelta
 from functools import partial
 
 from tornado import gen
+from tornado import escape
 
 from .redistest import RedisTestCase, async_test
 
 SCAN_BUF_SIZE = 200
+
 
 class ServerCommandsTestCase(RedisTestCase):
 
@@ -23,7 +25,7 @@ class ServerCommandsTestCase(RedisTestCase):
         res = yield gen.Task(self.client.set, 'foo', 'бар')
         self.assertEqual(res, True)
         res = yield gen.Task(self.client.get, 'foo')
-        self.assertEqual(res, u'бар')
+        self.assertEqual(escape.to_unicode(res), u'бар')
         self.stop()
 
     @async_test

@@ -12,7 +12,7 @@ import time as mod_time
 from tornado.ioloop import IOLoop
 from tornado import gen
 from tornado import stack_context
-from tornado.escape import to_unicode, to_basestring
+from tornado.escape import to_basestring
 
 from .exceptions import RequestError, ConnectionError, ResponseError
 from .connection import Connection
@@ -458,8 +458,7 @@ class Client(object):
         if not response:
             raise ResponseError('EmptyResponse')
         else:
-            response = to_unicode(response)
-            response = response[:-2]
+            response = response.rstrip("\n\r")
         callback(response)
 
     def process_data(self, data, cmd_line):

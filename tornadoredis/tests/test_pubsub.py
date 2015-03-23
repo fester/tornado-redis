@@ -3,6 +3,7 @@ from collections import namedtuple
 import json
 from random import randint
 from tornado import gen
+from tornado import escape
 
 from .redistest import RedisTestCase, async_test
 from tornadoredis.pubsub import SockJSSubscriber, SocketIOSubscriber
@@ -224,7 +225,7 @@ class SockJSSubscriberTestCase(RedisTestCase):
         yield gen.Task(self.pause)
 
         self.assertTrue(broadcaster.messages)
-        self.assertEqual(broadcaster.messages[0], data)
+        self.assertEqual(escape.to_unicode(broadcaster.messages[0]), data)
 
         self.stop()
 
